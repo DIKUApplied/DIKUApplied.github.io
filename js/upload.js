@@ -74,7 +74,12 @@ async function submitProject(e) {
 
         const imageFile = document.getElementById('projectImage').files[0];
         
-        await github.uploadProject(projectData, imageFile);
+        // Convert image to base64 before uploading
+        if (imageFile) {
+            projectData.image = await convertImageToBase64(imageFile);
+        }
+        
+        await github.uploadProject(projectData);
         alert('Project uploaded successfully!');
         closeModal();
         refreshProjectGrid(isAdminMode);
