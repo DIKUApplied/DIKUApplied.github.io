@@ -4,6 +4,7 @@ const uploadButton = document.getElementById('uploadButton');
 const passwordSection = document.getElementById('passwordSection');
 const uploadForm = document.getElementById('uploadForm');
 const imagePreview = document.getElementById('imagePreview');
+
 let currentImageFile = null;
 
 // Open modal when upload button is clicked
@@ -57,7 +58,7 @@ document.getElementById('projectImage').onchange = function(e) {
     }
 };
 
-const github = new GitHubAPI(GITHUB_CONFIG);
+const github = new GitHubAPI(GITHUB_TOKEN);
 
 async function submitProject(e) {
     e.preventDefault();
