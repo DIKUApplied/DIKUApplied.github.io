@@ -31,7 +31,7 @@
             <div class="event-details">
                 <h2>Event Details</h2>
                 <div class="project-grid">
-                    <!-- Projects will be loaded here from projects.json -->
+                    <!-- Projects will be loaded here -->
                 </div>
             </div>
         </section>
@@ -125,6 +125,12 @@
             if (!eventDropdown.contains(e.target) && !eventSelector.contains(e.target)) {
                 eventDropdown.classList.remove('active');
             }
+        });
+    </script>
+    <script src="../../js/load-projects.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects('.project-grid', './projects.json');
         });
     </script>
 </body>

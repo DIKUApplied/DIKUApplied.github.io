@@ -32,8 +32,10 @@
 
         <section class="latest-event">
             <h2>Latest Event</h2>
-            <div class="event-info">
-                <!-- Latest event info will be loaded here -->
+            <h3>DIKU Applied Hackathon - January 2025</h3>
+            <p>Our inaugural hackathon event at the University of Copenhagen</p>
+            <div class="project-grid">
+                <!-- Projects will be loaded here -->
             </div>
         </section>
 
@@ -51,5 +53,11 @@
 
     <script src="js/main.js"></script>
     <script src="js/events.js"></script>
+    <script src="js/load-projects.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects('.project-grid', 'events/2025-01-11/projects.json');
+        });
+    </script>
 </body>
 </html>
