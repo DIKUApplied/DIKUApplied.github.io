@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIKU Applied - 01-11-2025</title>
+    <title>DIKU Applied - January 2025</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/events.css">
     <link rel="stylesheet" href="../../css/upload.css">
@@ -16,14 +16,14 @@
             <button class="event-selector">Select Event</button>
             <div class="event-dropdown">
                 <a href="../../">Home</a>
-                <a href="../2025-01-11/">11-1-2025</a>
+                <a href="../2025-01-11/">January 11, 2025</a>
             </div>
         </div>
     </nav>
 
     <main>
         <section class="hero">
-            <h1>11-1-2025</h1>
+            <h1>January 2025 Hackathon</h1>
             <p>Our inaugural event at DIKU</p>
         </section>
 
@@ -39,10 +39,7 @@
 
     <footer>
         <p>&copy; 2025 DIKU Applied - University of Copenhagen</p>
-        <button 
-            id="uploadButton"
-            class="upload-button"
-        >
+        <button id="uploadButton" class="upload-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
             </svg>
@@ -108,37 +105,51 @@
         </div>
     </div>
 
-    <script src="../../js/config.js"></script>
-    <script src="../../js/github-api.js"></script>
-    <script src="../../js/upload.js"></script>
-    <script>
-        // Dropdown functionality
-        const eventSelector = document.querySelector('.event-selector');
-        const eventDropdown = document.querySelector('.event-dropdown');
-
-        eventSelector.addEventListener('click', (e) => {
-            e.stopPropagation();
-            eventDropdown.classList.toggle('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!eventDropdown.contains(e.target) && !eventSelector.contains(e.target)) {
-                eventDropdown.classList.remove('active');
-            }
-        });
-    </script>
-    <script src="../../js/load-projects.js"></script>
+    <!-- Scripts in correct order -->
     <script src="../../js/github-config.js"></script>
     <script src="../../js/github-api.js"></script>
     <script src="../../js/admin.js"></script>
     <script>
-        // Initialize the GitHub API instance
+        // Initialize GitHub API
         const github = new GitHubAPI(GITHUB_TOKEN);
 
-        // Submit handler for the upload form
+        // Load projects initially
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+        });
+
+        // Event handler for upload button
+        document.getElementById('uploadButton').addEventListener('click', () => {
+            document.getElementById('uploadModal').style.display = 'block';
+            document.getElementById('passwordSection').style.display = 'block';
+            document.getElementById('uploadForm').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').textContent = '';
+        });
+
+        // Close modal function
+        function closeModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            document.getElementById('projectForm').reset();
+            const imagePreview = document.getElementById('imagePreview');
+            imagePreview.style.backgroundImage = '';
+            imagePreview.textContent = 'No image selected';
+        }
+
+        // Password validation
+        function validatePassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === 'firstdikuapplied') {
+                document.getElementById('passwordSection').style.display = 'none';
+                document.getElementById('uploadForm').style.display = 'block';
+            } else {
+                document.getElementById('passwordError').textContent = 'Incorrect password';
+            }
+        }
+
+        // Project submission
         async function submitProject(e) {
             e.preventDefault();
-            
             try {
                 const formData = {
                     title: document.getElementById('projectTitle').value,
@@ -153,12 +164,27 @@
                 await github.uploadProject(formData, imageFile);
                 alert('Project uploaded successfully!');
                 closeModal();
-                loadProjects(); // Refresh the display
+                loadProjects();
             } catch (error) {
                 console.error('Error uploading project:', error);
                 alert('Error uploading project. Please try again.');
             }
         }
+
+        // Event dropdown functionality
+        const eventSelector = document.querySelector('.event-selector');
+        const eventDropdown = document.querySelector('.event-dropdown');
+
+        eventSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            eventDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!eventDropdown.contains(e.target) && !eventSelector.contains(e.target)) {
+                eventDropdown.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
