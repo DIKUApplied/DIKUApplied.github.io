@@ -116,3 +116,44 @@ h2 {
     margin-bottom: 20px;
     color: #2F4858;
 }
+
+.admin-button {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-button.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
+.delete-button {
+    display: none;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background: #c82333;
+}
+
+/* Show delete button when in admin mode */
+.admin-mode .delete-button {
+    display: block;
+}
