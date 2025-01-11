@@ -1,19 +1,69 @@
 class GitHubAPI {
-    constructor(token) {
-        this.token = token;
+    constructor() {
         this.baseUrl = 'https://api.github.com';
-        this.owner = 'DIKUApplied';
-        this.repo = 'dikuapplied.github.io';
+        this.owner = GITHUB_CONFIG.OWNER;
+        this.repo = GITHUB_CONFIG.REPO_NAME;
+        this.appId = GITHUB_CONFIG.APP_ID;
+        this.installationId = GITHUB_CONFIG.INSTALLATION_ID;
+        this.privateKey = GITHUB_CONFIG.PRIVATE_KEY;
+        this.token = null;
+        this.tokenExpiresAt = null;
+    }
+
+    async getInstallationToken() {
+        // Check if we have a valid token
+        if (this.token && this.tokenExpiresAt && new Date() < this.tokenExpiresAt) {
+            return this.token;
+        }
+
+        try {
+            // Create JWT
+            const now = Math.floor(Date.now() / 1000);
+            const payload = {
+                iat: now,
+                exp: now + (10 * 60), // JWT expires in 10 minutes
+                iss: this.appId
+            };
+
+            const jwt = jwt_encode(payload, this.privateKey, 'RS256');
+
+            // Get installation token
+            const response = await fetch(
+                `${this.baseUrl}/app/installations/${this.installationId}/access_tokens`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${jwt}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to get installation token: ${response.status}`);
+            }
+
+            const data = await response.json();
+            this.token = data.token;
+            this.tokenExpiresAt = new Date(data.expires_at);
+            return this.token;
+
+        } catch (error) {
+            console.error('Error getting installation token:', error);
+            throw error;
+        }
     }
 
     async uploadFile(path, content, message, isImage = false) {
         try {
+            const token = await this.getInstallationToken();
+            
             // First check if file exists
             let existingFile = null;
             try {
                 const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
                     headers: {
-                        'Authorization': `token ${this.token}`,
+                        'Authorization': `Bearer ${token}`,
                         'Accept': 'application/vnd.github.v3+json'
                     }
                 });
@@ -42,7 +92,7 @@ class GitHubAPI {
             const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${this.token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
@@ -79,7 +129,7 @@ class GitHubAPI {
             try {
                 const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${projectsPath}`, {
                     headers: {
-                        'Authorization': `token ${this.token}`,
+                        'Authorization': `Bearer ${this.token}`,
                         'Accept': 'application/vnd.github.v3+json'
                     }
                 });
@@ -123,7 +173,7 @@ class GitHubAPI {
             // First get the file to get its SHA
             const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
                 headers: {
-                    'Authorization': `token ${this.token}`,
+                    'Authorization': `Bearer ${this.token}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
@@ -138,7 +188,7 @@ class GitHubAPI {
             const deleteResponse = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `token ${this.token}`,
+                    'Authorization': `Bearer ${this.token}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json'
                 },
@@ -164,7 +214,7 @@ class GitHubAPI {
             // 1. Get current projects.json
             const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/events/2025-01-11/projects.json`, {
                 headers: {
-                    'Authorization': `token ${this.token}`,
+                    'Authorization': `Bearer ${this.token}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
