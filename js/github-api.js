@@ -19,13 +19,23 @@ class GitHubAPI {
         try {
             // Create JWT
             const now = Math.floor(Date.now() / 1000);
+            const header = {
+                alg: 'RS256',
+                typ: 'JWT'
+            };
             const payload = {
                 iat: now,
                 exp: now + (10 * 60), // JWT expires in 10 minutes
                 iss: this.appId
             };
 
-            const jwt = jwt_encode(payload, this.privateKey, 'RS256');
+            // Create JWT using jsrsasign
+            const sHeader = JSON.stringify(header);
+            const sPayload = JSON.stringify(payload);
+            const privateKey = KEYUTIL.getKey(this.privateKey);
+            const jwt = KJUR.jws.JWS.sign('RS256', sHeader, sPayload, privateKey);
+
+            console.log('JWT created successfully');
 
             // Get installation token
             const response = await fetch(
@@ -40,16 +50,20 @@ class GitHubAPI {
             );
 
             if (!response.ok) {
-                throw new Error(`Failed to get installation token: ${response.status}`);
+                const errorData = await response.json();
+                console.error('Installation token error:', errorData);
+                throw new Error(`Failed to get installation token: ${response.status} - ${errorData.message}`);
             }
 
             const data = await response.json();
             this.token = data.token;
             this.tokenExpiresAt = new Date(data.expires_at);
+            console.log('Installation token obtained successfully');
             return this.token;
 
         } catch (error) {
             console.error('Error getting installation token:', error);
+            console.error('Stack trace:', error.stack);
             throw error;
         }
     }
@@ -214,7 +228,7 @@ class GitHubAPI {
             // 1. Get current projects.json
             const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/events/2025-01-11/projects.json`, {
                 headers: {
-                    'Authorization': `Bearer ${this.token}`,
+                    'Authorization': `token ${this.token}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
