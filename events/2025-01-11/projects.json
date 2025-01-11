@@ -5,8 +5,9 @@
     "projects": [
         {
             "name": "Project Name",
-            "description": "Project description",
-            "githubLink": "https://github.com/...",
+            "description": "Project description goes here. Explain what the project does and what technologies were used.",
+            "githubLink": "https://github.com/username/project",
+            "contributors": ["Student Name"],
             "screenshots": ["screenshot1.png"]
         }
     ]
