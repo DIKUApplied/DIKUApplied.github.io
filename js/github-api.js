@@ -6,7 +6,7 @@ class GitHubAPI {
         this.repo = 'dikuapplied.github.io';
     }
 
-    async uploadFile(path, content, message) {
+    async uploadFile(path, content, message, isImage = false) {
         try {
             // First check if file exists
             let existingFile = null;
@@ -23,18 +23,21 @@ class GitHubAPI {
             } catch (error) {
                 console.log('File does not exist yet');
             }
-
+    
+            // For images, content is already base64. For other files, we need to encode it
+            const contentToUpload = isImage ? content : btoa(unescape(encodeURIComponent(content)));
+    
             // Prepare the request body
             const body = {
                 message: message,
-                content: btoa(unescape(encodeURIComponent(content)))
+                content: contentToUpload
             };
-
+    
             // If file exists, include its SHA
             if (existingFile && existingFile.sha) {
                 body.sha = existingFile.sha;
             }
-
+    
             // Upload/update the file
             const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
                 method: 'PUT',
@@ -45,11 +48,11 @@ class GitHubAPI {
                 },
                 body: JSON.stringify(body)
             });
-
+    
             if (!response.ok) {
                 throw new Error(`GitHub API error: ${response.status}`);
             }
-
+    
             return await response.json();
         } catch (error) {
             console.error('Error uploading file:', error);
@@ -64,16 +67,14 @@ class GitHubAPI {
             const filename = `project_${timestamp}.png`;
             const imagePath = `events/2025-01-11/images/project-screenshots/${filename}`;
             
-            // Convert image to base64
+            // Convert image to base64 properly
             const imageBase64 = await this.fileToBase64(imageFile);
             
-            // Upload image
-            await this.uploadFile(imagePath, imageBase64, 'Upload project image');
+            // Upload image with isImage flag set to true
+            await this.uploadFile(imagePath, imageBase64, 'Upload project image', true);
             
-            // 2. Update projects.json
+            // Rest of the method stays the same...
             const projectsPath = 'events/2025-01-11/projects.json';
-            
-            // Get current projects or create new array if doesn't exist
             let currentProjects = { projects: [] };
             try {
                 const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${projectsPath}`, {
@@ -100,16 +101,16 @@ class GitHubAPI {
                 uploadDate: new Date().toISOString(),
                 image: `https://raw.githubusercontent.com/${this.owner}/${this.repo}/main/${imagePath}`
             };
-
+    
             currentProjects.projects.push(newProject);
             
-            // Upload updated projects.json
+            // Upload updated projects.json (not an image, so no isImage flag)
             await this.uploadFile(
                 projectsPath,
                 JSON.stringify(currentProjects, null, 2),
                 'Add new project'
             );
-
+    
             return newProject;
         } catch (error) {
             console.error('Error uploading project:', error);
@@ -209,10 +210,15 @@ class GitHubAPI {
         }
     }
 
+    // Update the fileToBase64 method to handle images properly
     fileToBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onload = () => {
+                // Get the base64 string without the data URL prefix
+                const base64String = reader.result.split(',')[1];
+                resolve(base64String);
+            };
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
