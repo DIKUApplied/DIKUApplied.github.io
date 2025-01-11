@@ -1,21 +1,27 @@
 :root {
-    --primary-color: #1a237e;
-    --secondary-color: #0d47a1;
-    --text-color: #333;
-    --background-color: #f5f5f5;
+    --primary-color: #0077ED;
+    --gradient-start: #0077ED;
+    --gradient-end: #00A3FF;
+    --text-color: #1D1D1F;
+    --text-secondary: #86868B;
+    --background-color: #FBFBFD;
+    --card-background: #FFFFFF;
     --spacing-unit: 1rem;
+    --hero-height: 70vh;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen,
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    line-height: 1.6;
+    line-height: 1.47059;
     color: var(--text-color);
     background-color: var(--background-color);
 }
@@ -24,14 +30,29 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-unit);
-    background-color: var(--primary-color);
-    color: white;
+    padding: 1.2rem calc(var(--spacing-unit) * 2);
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .logo {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+    opacity: 0.8;
 }
 
 .nav-links {
@@ -39,22 +60,44 @@ body {
 }
 
 .event-selector {
-    padding: 0.5rem 1rem;
-    background: transparent;
-    border: 2px solid white;
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    border: none;
     color: white;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 980px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-selector:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 119, 237, 0.2);
 }
 
 .event-dropdown {
     display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 0.5rem);
     right: 0;
-    background: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    min-width: 200px;
+    overflow: hidden;
+    animation: dropdownFade 0.2s ease-out;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .event-dropdown.active {
@@ -63,29 +106,126 @@ body {
 
 .event-dropdown a {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1.2rem;
     color: var(--text-color);
     text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.event-dropdown a:hover {
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 .hero {
+    height: var(--hero-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: calc(var(--spacing-unit) * 4) var(--spacing-unit);
-    background-color: var(--secondary-color);
+    padding: 0 var(--spacing-unit);
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 100%);
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    font-weight: 400;
+    max-width: 600px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
 }
 
 .latest-event,
 .all-events {
-    padding: calc(var(--spacing-unit) * 2) var(--spacing-unit);
+    padding: calc(var(--spacing-unit) * 4) var(--spacing-unit);
     max-width: 1200px;
     margin: 0 auto;
 }
 
+h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.project-card {
+    background: var(--card-background);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.project-card h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.project-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.project-card a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    transition: opacity 0.2s ease;
+}
+
+.project-card a:hover {
+    opacity: 0.7;
+}
+
 footer {
     text-align: center;
-    padding: var(--spacing-unit);
-    background-color: var(--primary-color);
-    color: white;
+    padding: calc(var(--spacing-unit) * 2);
+    background-color: var(--background-color);
+    color: var(--text-secondary);
     margin-top: auto;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
