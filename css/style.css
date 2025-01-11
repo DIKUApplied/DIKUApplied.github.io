@@ -129,7 +129,7 @@ body {
     align-items: center;
     text-align: center;
     padding: 0 var(--spacing-unit);
-    background: url('../assets/images/DIKUApplied.jpg') center center;
+    background: url('../assets/images/DIKUApplied.jpg') center 40% no-repeat;
     background-size: cover;
     color: white;
     position: relative;
