@@ -1,14 +1,28 @@
 {
-    "eventName": "DIKU Applied Hackathon - January 2025",
-    "date": "2025-01-11",
-    "description": "Our inaugural hackathon event at the University of Copenhagen",
-    "projects": [
-        {
-            "name": "Project Name",
-            "description": "Project description goes here. Explain what the project does and what technologies were used.",
-            "githubLink": "https://github.com/username/project",
-            "contributors": ["Student Name"],
-            "screenshots": ["screenshot1.png"]
-        }
-    ]
+  "eventName": "DIKU Applied Hackathon - January 2025",
+  "date": "2025-01-11",
+  "description": "Our inaugural hackathon event at the University of Copenhagen",
+  "projects": [
+    {
+      "name": "Project Name",
+      "description": "Project description goes here. Explain what the project does and what technologies were used.",
+      "githubLink": "https://github.com/username/project",
+      "contributors": [
+        "Student Name"
+      ],
+      "screenshots": [
+        "screenshot1.png"
+      ]
+    },
+    {
+      "id": "1736624493583",
+      "name": "DIKU Applied Website",
+      "creatorName": "Gustav Jes Iversen",
+      "creatorEmail": "gustavjes0105@gmail.com",
+      "githubLink": "https://github.com/DIKUApplied/DIKUApplied.github.io",
+      "description": "Official DIKU Applied website, built open source with a combination of HTML, CSS and JS. Built to house the portfolio of our participants and events.",
+      "uploadDate": "2025-01-11T19:41:37.188Z",
+      "image": "https://raw.githubusercontent.com/DIKUApplied/dikuapplied.github.io/main/events/2025-01-11/images/project-screenshots/project_1736624493583.png"
+    }
+  ]
 }
