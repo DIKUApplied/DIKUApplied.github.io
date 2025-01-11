@@ -262,3 +262,40 @@ footer {
     margin-top: auto;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+.admin-button {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 12px;
+}
+
+.admin-button:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.admin-button.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
+.delete-button {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    margin-top: 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+    background: #c82333;
+}

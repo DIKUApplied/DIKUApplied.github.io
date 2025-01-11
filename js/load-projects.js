@@ -32,3 +32,37 @@ async function loadProjects(containerSelector, projectsPath) {
         container.innerHTML = '<p class="error">Error loading projects. Please try again later.</p>';
     }
 }
+
+let isAdminMode = false;
+
+function renderProjects(data, container) {
+    const projectsHTML = data.projects.map(project => `
+        <div class="project-card" data-project-id="${project.id}">
+            ${project.image ? `<img src="${project.image}" alt="${project.name}">` : ''}
+            <h4>${project.name}</h4>
+            <p class="creator-info">by ${project.creatorName}</p>
+            <p>${project.description}</p>
+            <a href="${project.githubLink}" class="github-link">View on GitHub</a>
+            ${isAdminMode ? `
+                <button class="delete-button" onclick="deleteProject('${project.id}')">
+                    Delete Project
+                </button>
+            ` : ''}
+        </div>
+    `).join('');
+
+    container.innerHTML = projectsHTML;
+}
+
+// Add click handler for admin button
+document.getElementById('adminButton').addEventListener('click', () => {
+    const password = prompt('Enter admin password:');
+    if (password === 'firstdikuapplied') { // Using the same password
+        isAdminMode = !isAdminMode;
+        document.getElementById('adminButton').classList.toggle('active');
+        // Refresh the project display
+        loadProjects();
+    } else {
+        alert('Incorrect password');
+    }
+});

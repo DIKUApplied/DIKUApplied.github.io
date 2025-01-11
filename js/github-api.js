@@ -117,6 +117,98 @@ class GitHubAPI {
         }
     }
 
+    async deleteFile(path, message) {
+        try {
+            // First get the file to get its SHA
+            const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
+                headers: {
+                    'Authorization': `token ${this.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to get file: ${response.status}`);
+            }
+    
+            const file = await response.json();
+    
+            // Delete the file
+            const deleteResponse = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${this.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    sha: file.sha
+                })
+            });
+    
+            if (!deleteResponse.ok) {
+                throw new Error(`Failed to delete file: ${deleteResponse.status}`);
+            }
+    
+            return await deleteResponse.json();
+        } catch (error) {
+            console.error('Error deleting file:', error);
+            throw error;
+        }
+    }
+    
+    async deleteProject(projectId) {
+        try {
+            // 1. Get current projects.json
+            const response = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/events/2025-01-11/projects.json`, {
+                headers: {
+                    'Authorization': `token ${this.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to get projects.json');
+            }
+    
+            const data = await response.json();
+            const currentProjects = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    
+            // 2. Find project to delete
+            const projectToDelete = currentProjects.projects.find(p => p.id === projectId);
+            if (!projectToDelete) {
+                throw new Error('Project not found');
+            }
+    
+            // 3. Delete project image if it exists
+            if (projectToDelete.image) {
+                const imagePath = projectToDelete.image.split('/main/')[1];
+                try {
+                    await this.deleteFile(imagePath, 'Delete project image');
+                } catch (error) {
+                    console.error('Error deleting image:', error);
+                    // Continue even if image delete fails
+                }
+            }
+    
+            // 4. Update projects.json without the deleted project
+            currentProjects.projects = currentProjects.projects.filter(p => p.id !== projectId);
+    
+            // 5. Save updated projects.json
+            await this.uploadFile(
+                'events/2025-01-11/projects.json',
+                JSON.stringify(currentProjects, null, 2),
+                'Delete project'
+            );
+    
+            return true;
+        } catch (error) {
+            console.error('Error deleting project:', error);
+            throw error;
+        }
+    }
+
     fileToBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -125,4 +217,6 @@ class GitHubAPI {
             reader.readAsDataURL(file);
         });
     }
+    
+    
 }
