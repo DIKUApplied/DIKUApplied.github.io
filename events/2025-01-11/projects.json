@@ -1,0 +1,13 @@
+{
+    "eventName": "DIKU Applied Hackathon - January 2025",
+    "date": "2025-01-11",
+    "description": "Our inaugural hackathon event at the University of Copenhagen",
+    "projects": [
+        {
+            "name": "Project Name",
+            "description": "Project description",
+            "githubLink": "https://github.com/...",
+            "screenshots": ["screenshot1.png"]
+        }
+    ]
+}
