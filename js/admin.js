@@ -1,12 +1,13 @@
+// admin.js
 let isAdminMode = false;
 
 // Admin button click handler
-document.getElementById('adminButton').addEventListener('click', () => {
+document.getElementById('adminButton')?.addEventListener('click', () => {
     const password = prompt('Enter admin password:');
     if (password === 'firstdikuapplied') {
         isAdminMode = !isAdminMode;
         document.getElementById('adminButton').classList.toggle('active');
-        loadProjects(); // Refresh projects to show/hide delete buttons
+        loadProjects();
     } else {
         alert('Incorrect password');
     }
@@ -21,7 +22,7 @@ async function deleteProject(projectId) {
     try {
         await github.deleteProject(projectId);
         alert('Project deleted successfully!');
-        loadProjects(); // Refresh the display
+        loadProjects();
     } catch (error) {
         console.error('Error:', error);
         alert('Error deleting project. Please try again.');
@@ -61,3 +62,5 @@ async function loadProjects() {
         projectGrid.innerHTML = '<p class="error">Error loading projects. Please try again later.</p>';
     }
 }
+
+

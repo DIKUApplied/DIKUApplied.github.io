@@ -128,13 +128,37 @@
         });
     </script>
     <script src="../../js/load-projects.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProjects('.project-grid', './projects.json');
-        });
-    </script>
     <script src="../../js/github-config.js"></script>
     <script src="../../js/github-api.js"></script>
     <script src="../../js/admin.js"></script>
+    <script>
+        // Initialize the GitHub API instance
+        const github = new GitHubAPI(GITHUB_TOKEN);
+
+        // Submit handler for the upload form
+        async function submitProject(e) {
+            e.preventDefault();
+            
+            try {
+                const formData = {
+                    title: document.getElementById('projectTitle').value,
+                    creatorName: document.getElementById('creatorName').value,
+                    creatorEmail: document.getElementById('creatorEmail').value,
+                    githubLink: document.getElementById('githubLink').value,
+                    description: document.getElementById('description').value
+                };
+
+                const imageFile = document.getElementById('projectImage').files[0];
+                
+                await github.uploadProject(formData, imageFile);
+                alert('Project uploaded successfully!');
+                closeModal();
+                loadProjects(); // Refresh the display
+            } catch (error) {
+                console.error('Error uploading project:', error);
+                alert('Error uploading project. Please try again.');
+            }
+        }
+    </script>
 </body>
 </html>

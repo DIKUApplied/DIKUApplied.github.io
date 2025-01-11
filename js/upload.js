@@ -107,3 +107,15 @@ function convertImageToBase64(file) {
         reader.readAsDataURL(file);
     });
 }
+
+// upload.js
+document.getElementById('projectForm').addEventListener('submit', submitProject);
+
+// Close modal function
+function closeModal() {
+    document.getElementById('uploadModal').style.display = 'none';
+    document.getElementById('projectForm').reset();
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.style.backgroundImage = '';
+    imagePreview.textContent = 'No image selected';
+}
