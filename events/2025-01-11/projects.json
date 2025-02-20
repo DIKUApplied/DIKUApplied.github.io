@@ -9,9 +9,20 @@
       "description": "PensionOS is an AI-powered pension intelligence platform designed to simplify pension plan discovery and understanding for pension intermediaries and brokers managing company pension schemes. The platform uses natural language processing to enable users to quickly find relevant pension plans, requirements, and key details without digging through complex documentation.",
       "githubLink": "https://github.com/afristrup/PensionOS-DIKU-Applied",
       "contributors": [
-        "Aksel Fristrup"
+        "Alexander Fristrup"
       ],
       "image": "https://raw.githubusercontent.com/DIKUApplied/dikuapplied.github.io/main/events/2025-01-11/images/project-screenshots/P1.jpg",
+      "uploadDate": "2024-01-11T12:00:00.000Z"
+    },
+    {
+      "id": "1704980400001",
+      "name": "DIKU Applied Website",
+      "description": "The official website for DIKU Applied, built to showcase projects and events from the University of Copenhagen's hackathons. Features a modern, responsive design with GitHub integration for project management and automated deployment.",
+      "githubLink": "https://github.com/DIKUApplied/DIKUApplied.github.io",
+      "contributors": [
+        "Gustav Jes Iversen"
+      ],
+      "image": "https://raw.githubusercontent.com/DIKUApplied/dikuapplied.github.io/main/events/2025-01-11/images/project-screenshots/P2.jpg",
       "uploadDate": "2024-01-11T12:00:00.000Z"
     }
   ]
