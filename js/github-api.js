@@ -26,7 +26,7 @@ class GitHubAPI {
             const payload = {
                 iat: now,
                 exp: now + (10 * 60), // JWT expires in 10 minutes
-                iss: this.appId
+                iss: this.appIdd
             };
 
             // Create JWT using jsrsasign

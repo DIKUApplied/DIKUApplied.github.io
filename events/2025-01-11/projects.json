@@ -4,15 +4,15 @@
   "description": "Our inaugural hackathon event at the University of Copenhagen",
   "projects": [
     {
-      "name": "Project Name",
-      "description": "Project description goes here. Explain what the project does and what technologies were used.",
-      "githubLink": "https://github.com/username/project",
+      "id": "1704980400000",
+      "name": "PensionOS",
+      "description": "PensionOS is an AI-powered pension intelligence platform designed to simplify pension plan discovery and understanding for pension intermediaries and brokers managing company pension schemes. The platform uses natural language processing to enable users to quickly find relevant pension plans, requirements, and key details without digging through complex documentation.",
+      "githubLink": "https://github.com/afristrup/PensionOS-DIKU-Applied",
       "contributors": [
-        "Student Name"
+        "Aksel Fristrup"
       ],
-      "screenshots": [
-        "screenshot1.png"
-      ]
+      "image": "https://raw.githubusercontent.com/DIKUApplied/dikuapplied.github.io/main/events/2025-01-11/images/project-screenshots/P1.jpg",
+      "uploadDate": "2024-01-11T12:00:00.000Z"
     }
   ]
 }
